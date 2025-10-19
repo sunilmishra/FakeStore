@@ -1,6 +1,7 @@
 package com.example.fakestore.auth
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.fakestore.ResultState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -92,5 +93,15 @@ class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
                 _effect.emit(LoginEffect.Failed(e.message ?: "Login Failed"))
             }
         }
+    }
+}
+
+
+/// Initiate LoginViewModel using factory pattern
+/// It will allow to inject arguments
+class LoginViewModelFactory(val repository: AuthRepository) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return LoginViewModel(repository) as T
     }
 }

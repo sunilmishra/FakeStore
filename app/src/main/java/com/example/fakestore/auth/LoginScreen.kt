@@ -25,12 +25,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fakestore.ResultState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(viewModel: LoginViewModel) {
+fun LoginScreen(repository: AuthRepository) {
+
+    /// Initialize the LoginViewModel
+    val factory = remember { LoginViewModelFactory(repository) }
+    val viewModel: LoginViewModel = viewModel(factory = factory)
+
+    /// Get LoginState from viewModel
     val state by viewModel.loginState.collectAsState()
+
     val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
@@ -46,6 +54,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
             }
         }
     }
+
+
 
     Scaffold(
         snackbarHost = {
