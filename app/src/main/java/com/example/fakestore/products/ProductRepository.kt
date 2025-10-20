@@ -25,11 +25,13 @@ class ProductRepositoryImpl(
         try {
             /// step 1: fetch all Product from Api Service
             val products = service.getProducts()
-            println(" ---- products: $products")
             for (item in products) {
                 val entity = item.toEntity()
                 entities.add(entity)
             }
+
+            /// clean this table
+            dao.deleteAll()
 
             /// step 2: Store all product in the database
             dao.insertAll(entities)

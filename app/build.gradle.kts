@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -93,4 +94,12 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    // Navigation3
+    implementation(libs.navigation3.ui)
+    implementation(libs.navigation3.runtime)
+
+    // Kotlin Serialization
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
 }
