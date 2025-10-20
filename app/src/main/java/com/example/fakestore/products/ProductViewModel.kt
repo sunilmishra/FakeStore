@@ -21,31 +21,33 @@ class ProductViewModel(val repository: ProductRepository) : ViewModel() {
     val uiState: StateFlow<ProductUiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            loadProducts()
-            watchProducts()
-        }
+        loadProducts()
+        watchProducts()
     }
 
     /// Fetch Products from Api & Store into Database
-    private suspend fun loadProducts() {
-        try {
-            _uiState.value = ProductUiState.Loading
-            /// Fetch Products from Api and Store them in the Database
-            repository.getAll()
-        } catch (e: Exception) {
-            _uiState.value = ProductUiState.Error("Failed to fetch products: ${e.message}")
+    private fun loadProducts() {
+        viewModelScope.launch {
+            try {
+                _uiState.value = ProductUiState.Loading
+                /// Fetch Products from Api and Store them in the Database
+                repository.getAll()
+            } catch (e: Exception) {
+                _uiState.value = ProductUiState.Error("Failed to fetch products: ${e.message}")
+            }
         }
     }
 
     /// Observe the Products
-    private suspend fun watchProducts() {
-        try {
-            repository.watchAll().collectLatest {
-                _uiState.value = ProductUiState.Success(it)
+    private fun watchProducts() {
+        viewModelScope.launch {
+            try {
+                repository.watchAll().collectLatest {
+                    _uiState.value = ProductUiState.Success(it)
+                }
+            } catch (e: Exception) {
+                _uiState.value = ProductUiState.Error("Failed to watch products: ${e.message}")
             }
-        } catch (e: Exception) {
-            _uiState.value = ProductUiState.Error("Failed to watch products: ${e.message}")
         }
     }
 }

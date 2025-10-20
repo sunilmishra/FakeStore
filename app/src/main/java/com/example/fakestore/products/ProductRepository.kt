@@ -29,7 +29,7 @@ class ProductRepositoryImpl(
                 val entity = item.toEntity()
                 entities.add(entity)
             }
-
+            
             /// clean this table
             dao.deleteAll()
 
